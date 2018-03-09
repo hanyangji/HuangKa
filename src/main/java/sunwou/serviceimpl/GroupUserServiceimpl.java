@@ -128,7 +128,6 @@ public class GroupUserServiceimpl implements GroupUserService {
 			}else {
 				//团购信息不存在
 			}
-		
 		return null;
 	}
 
