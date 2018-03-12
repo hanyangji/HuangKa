@@ -55,7 +55,7 @@ public class GroupUserServiceimpl implements GroupUserService {
 		String tuanzhangId=createGroup.getFk_us_id();
 		if(createGroup.getEnjoy_num()<createGroup.getGroupInfo().getGr_limitnum()) {
 			//参团用户表添加一条记录
-			groupUserDao.add(t);
+			GroupUser groupUser=groupUserDao.add(t);
 			//开团表的参团人数+1
 			createGroup=createGroupDao.updateEnjoyNum(createGroup);
 			//查询团购信息是否存在
@@ -72,6 +72,7 @@ public class GroupUserServiceimpl implements GroupUserService {
 				if((createGroup.getEnjoy_num()>=(createGroup.getGroupInfo().getGr_limitnum()-1))) {
 					//团购信息表成功开团数+1
 					groupInfoDao.updateSuc(groupInfo);
+					groupUserDao.updateSuc(groupUser);
 					List<GroupUser> ls=groupUserDao.findBycgId(createGroup);
 					map.put("appid", appid);
 					map.put("secert", secert);

@@ -109,8 +109,10 @@ public class UserInfoDaoimpl implements UserInfoDao {
 	 * 个人开团数排名
 	 */
 	public Object rank(String info) {
-		Query query = new Query();  
-	    query.with(new Sort(Direction.DESC,info));  
+		Query query = new Query();
+		if(info!=null) {
+			query.with(new Sort(Direction.DESC,info));
+		}
 	    List<UserInfo> li =mongoTemplate.find(query, UserInfo.class, "UserInfo"); 
 		return li;
 	}

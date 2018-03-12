@@ -11,4 +11,5 @@ public interface GroupUserDao extends BaseDao<GroupUser>{
 
 	List<GroupUser> findEnjoyGroup(GroupUser groupUser,Integer skip,Integer size);
 
+	GroupUser updateSuc(GroupUser groupUser);
 }

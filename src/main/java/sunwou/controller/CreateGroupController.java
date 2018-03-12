@@ -32,7 +32,6 @@ public class CreateGroupController {
 	@Autowired
 	private GroupInfoDao groupInfoDao;
 	
-	
 	/**
 	 * 团长开团调起微信支付
 	 */

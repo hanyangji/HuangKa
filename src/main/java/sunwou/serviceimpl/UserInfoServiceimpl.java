@@ -50,7 +50,7 @@ public class UserInfoServiceimpl implements UserInfoService {
 	 * (non-Javadoc)每周执行一次
 	 * @see sunwou.service.UserInfoService#updateRank()
 	 */
-	@Scheduled(cron = "0 0 * 0/1 * ?")   
+	   
 	public void updateRank() {
 		Integer i=userInfoDao.findAndUpdateThisWeek();
 	}

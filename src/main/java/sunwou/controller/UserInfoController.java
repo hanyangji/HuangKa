@@ -4,6 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -54,10 +55,14 @@ public class UserInfoController {
 	 * @param response
 	 * @param request
 	 */
+	@RequestMapping("findRank")
 	public void rank(String info,HttpServletResponse response,HttpServletRequest request) {
 		new ResultUtil().push("list", userInfoService.rank(info)).out(response, request);;
 	}
-	
+	/**
+	 * 每周执行一次(保存本周开团数)
+	 */
+	@Scheduled(cron = "0 0 * 0/1 * ?")
 	public void updateRank() {
 		userInfoService.updateRank();
 	}

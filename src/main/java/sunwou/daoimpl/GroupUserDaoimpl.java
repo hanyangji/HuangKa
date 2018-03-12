@@ -8,6 +8,7 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Component;
 
 import sunwou.dao.GroupUserDao;
@@ -40,7 +41,6 @@ public class GroupUserDaoimpl implements GroupUserDao {
 	}
 
 	public int update(GroupUser t) {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
@@ -80,6 +80,12 @@ public class GroupUserDaoimpl implements GroupUserDao {
 		query.addCriteria(criteria);
 		query.with(new Sort(Direction.DESC,"_id"));
 		return mongoTemplate.find(query, GroupUser.class, "GroupUser");
+	}
+	
+	public GroupUser updateSuc(GroupUser groupUser) {
+		Query query= new Query(Criteria.where("_id").is(groupUser.getGu_id()));
+		Update update=new Update().inc("successNum", 1);
+		return mongoTemplate.findAndModify(query, update, GroupUser.class,"GroupUser");
 	}
 
 }
