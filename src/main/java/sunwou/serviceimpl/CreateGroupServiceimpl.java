@@ -64,7 +64,6 @@ public class CreateGroupServiceimpl implements CreateGroupService {
 	}
 
 	public List<CreateGroup> findCreateGroupYouWant(CreateGroup createGroup,Integer skip,Integer limit) {
-		
 		return createGroupDao.findCreateGroupYouWant(createGroup,skip,limit);
 	}
 

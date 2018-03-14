@@ -55,7 +55,7 @@ public class GroupInfoController {
 	
 
 	/**
-	 * 查询所有
+	 * 查询所有团购信息
 	 * @param response
 	 * @param groupInfo
 	 */

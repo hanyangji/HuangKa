@@ -65,10 +65,16 @@ public class UserInfoDaoimpl implements UserInfoDao {
 	 */
 	public UserInfo incCreateNum(String us_id) {
 		Query query=new Query(Criteria.where("_id").is(us_id));
-		Update update=new Update().inc("countGroup", 1);
-		update.inc("countGroupThisWeek", 1);
-		return mongoTemplate.findAndModify(query, update, UserInfo.class);
-		
+		Update update=new Update();
+		UserInfo userInfo=mongoTemplate.findOne(query, UserInfo.class,"UserInfo");
+		if(userInfo.getCountGroup()==null) {
+			update.set("countGroup", 1);
+			update.set("countGroupThisWeek", 1);
+		}else {
+			update.inc("countGroup", 1);
+			update.inc("countGroupThisWeek", 1);
+		}
+		return mongoTemplate.findAndModify(query, update, UserInfo.class,"UserInfo");
 	}
 
 	public UserInfo addPoints(UserInfo userInfo) {
@@ -113,12 +119,12 @@ public class UserInfoDaoimpl implements UserInfoDao {
 		if(info!=null) {
 			query.with(new Sort(Direction.DESC,info));
 		}
+		query.fields().include("_id").include("nickname").include("icon").include("countGroup").include("countGroupThisWeek");
 	    List<UserInfo> li =mongoTemplate.find(query, UserInfo.class, "UserInfo"); 
 		return li;
 	}
 	
 	public void updateRank() {
-		
 	}
 
 	public Integer findAndUpdateThisWeek() {
@@ -129,7 +135,4 @@ public class UserInfoDaoimpl implements UserInfoDao {
 		}
 		return mongoTemplate.upsert(new Query(), u, "UserInfo").getN();
 	}
-
-
-
 }

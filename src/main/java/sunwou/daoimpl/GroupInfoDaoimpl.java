@@ -253,7 +253,9 @@ public class GroupInfoDaoimpl implements GroupInfoDao {
 		if(isable!=null) {
 			criteria.and("grdeadline").gte(now);
 		}
-		return mongoTemplate.find(query, GroupInfo.class, "GroupInfo").get(0);
+		GroupInfo gi=mongoTemplate.findOne(query, GroupInfo.class,"GroupInfo");
+//		return mongoTemplate.find(query, GroupInfo.class, "GroupInfo").get(0);
+		return gi;
 	}
 
 

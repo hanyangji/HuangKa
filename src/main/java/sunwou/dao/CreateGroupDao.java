@@ -11,4 +11,5 @@ public interface CreateGroupDao extends BaseDao<CreateGroup>{
 	CreateGroup updateEnjoyNum(CreateGroup createGroup);
 
 	List<CreateGroup> findCreateGroupYouWant(CreateGroup createGroup,Integer skip,Integer limit);
+
 }

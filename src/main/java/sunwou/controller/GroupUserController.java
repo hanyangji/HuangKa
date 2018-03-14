@@ -39,7 +39,10 @@ public class GroupUserController {
 	 */
 	@RequestMapping("findEnjoyGroup")
 	public void enjoyGroup(HttpServletResponse response,HttpServletRequest request,GroupUser groupUser,Integer page,Integer size) {
-		int skip=(page-1)*size;
+		Integer skip=null;
+		if(page!=null&&size!=null) {
+			skip=(page-1)*size;
+		}
 		List<GroupUser> list=groupUserService.findEnjoyGroup(groupUser,skip,size);
 		new ResultUtil().push("list",list).out(response, request);
 	}

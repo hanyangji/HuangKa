@@ -80,7 +80,7 @@ public class CreateGroupDaoimpl implements CreateGroupDao {
 		if(createGroup.getEnjoy_num()!=null) {
 			criteria.and("enjoy_num").is(createGroup.getEnjoy_num());
 		}
-		if(createGroup.getGroupInfo().getGr_deadline()!=null) {
+		if(createGroup.getGroupInfo()!=null) {
 			SimpleDateFormat simpledf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			Date now = null;
 			try {
@@ -108,5 +108,7 @@ public class CreateGroupDaoimpl implements CreateGroupDao {
 		query.with(new Sort(Direction.DESC,"_id"));
 		return mongoTemplate.find(query, CreateGroup.class, "CreateGroup");
 	}
+
+
 
 }

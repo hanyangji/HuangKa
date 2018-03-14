@@ -1,6 +1,5 @@
 package sunwou.controller;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -15,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.mongodb.util.JSON;
 
+import sunwou.dao.CreateGroupDao;
 import sunwou.dao.GroupInfoDao;
 import sunwou.entity.CreateGroup;
 import sunwou.entity.GroupInfo;
@@ -30,8 +30,11 @@ public class CreateGroupController {
 	private CreateGroupService createGroupService;
 	
 	@Autowired
-	private GroupInfoDao groupInfoDao;
+	private CreateGroupDao createGroupDao;
 	
+	@Autowired
+	private GroupInfoDao groupInfoDao;
+
 	/**
 	 * 团长开团调起微信支付
 	 */
@@ -45,7 +48,8 @@ public class CreateGroupController {
 //		WXpayUtil.payrequest("皇卡优惠拼团", out_trade_no, list.get(0).getGr_cost(), openid, list.get(0).getGr_id(), request.getRemoteAddr());
 		new ResultUtil().push("result", JSON.parse(WXpayUtil.payrequest("皇卡优惠拼团", out_trade_no, free, openid, list.get(0).getGr_id(), request.getRemoteAddr()))).out(response, request);
 	}
-	
+
+
 	@RequestMapping("paySuccess")
 	public void pay(HttpServletResponse response,HttpServletRequest request) {
 		new ResultUtil().push("result",1).out(response, request);;
@@ -58,16 +62,6 @@ public class CreateGroupController {
 	 */
 	@RequestMapping("add")
 	public void add(HttpServletResponse response,CreateGroup createGroup,HttpServletRequest request){
-//		createGroup.setEnjoy_num(1);
-//		createGroup.setFk_us_id("5a5cb69591016d05a1afd3f5");
-//		GroupInfo groupInfo=new GroupInfo();
-//		groupInfo.setGr_success(1);
-//		groupInfo.setGr_cost("100000");
-//		groupInfo.setGr_exits(1);
-//		groupInfo.setGr_id("5a5cba1391016d05ac38420c");
-//		groupInfo.setGr_limitnum(2);
-//		groupInfo.setGr_num(1);
-//		createGroup.setGroupInfo(groupInfo);
 		GroupInfo groupInfo=new GroupInfo();
 		groupInfo.setGr_id(createGroup.getFk_gr_id());
 		List<GroupInfo> list=groupInfoDao.findById(groupInfo);
@@ -88,7 +82,11 @@ public class CreateGroupController {
 	 */
 	@RequestMapping("findGroupByUserId")
 	public void findGroupByUserId(HttpServletResponse response,HttpServletRequest request,CreateGroup createGroup,String isable,Integer page,Integer size) {
-		Integer skip=(page-1)*size;
+		Integer skip=null;
+		if(page!=null&&size!=null) {
+			skip=(page-1)*size;
+		}
+		System.out.println("cg:"+createGroup);
 		List<CreateGroup> createGroupList=createGroupService.findCreateGroupYouWant(createGroup,skip,size);
 		for(int i=0;i<createGroupList.size();i++) {
 			GroupInfo groupInfo=groupInfoDao.findGroupInfoById(createGroupList.get(i).getFk_gr_id(),isable);
@@ -98,8 +96,8 @@ public class CreateGroupController {
 		.out(response, request);
 	}
 	
-	/*
-	 * 拼团失败,给用户发送提醒
+	/**
+	 * 拼团失败,给用户发送模板消息
 	 */
 	@Scheduled(cron = "0 00 00 * * ?")  
 	public void checkTimeOut() {
@@ -108,8 +106,4 @@ public class CreateGroupController {
 		List<CreateGroup> list=createGroupService.findCreateGroupYouWant(cg,null,null);
 		createGroupService.checkTimeOut(list);
 	}
-	
-	
-	
-
 }
