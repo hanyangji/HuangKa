@@ -36,7 +36,7 @@ public class CreateGroupServiceimpl implements CreateGroupService {
 		t=createGroupDao.add(t);
 		if(t.getCg_id()!=null) {
 			//团购信息表的开团数+1
-			System.out.println(groupInfoDao.updateExits(t.getGroupInfo()));
+			groupInfoDao.updateExits(t.getGroupInfo());
 			//增加个人开团数(总的和每周的)
 			userInfoDao.incCreateNum(t.getFk_us_id());
 		}

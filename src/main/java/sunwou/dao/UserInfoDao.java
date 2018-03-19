@@ -14,7 +14,7 @@ public interface UserInfoDao extends BaseDao<UserInfo> {
 	
 	UserInfo incCreateNum(String us_id);
 
-	Object rank(String info);
+	Object rank(UserInfo info);
 
 	Integer findAndUpdateThisWeek();
 

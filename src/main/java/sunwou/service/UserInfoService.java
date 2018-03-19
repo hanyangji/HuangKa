@@ -8,7 +8,7 @@ public interface UserInfoService extends BaseService<UserInfo> {
 
 	UserInfo addOrUpdate(UserInfo userInfo);
 
-	Object rank(String info);
+	Object rank(UserInfo userInfo);
 
 	void updateRank();
 

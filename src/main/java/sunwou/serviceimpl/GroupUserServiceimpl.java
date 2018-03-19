@@ -74,16 +74,16 @@ public class GroupUserServiceimpl implements GroupUserService {
 					groupInfoDao.updateSuc(groupInfo);
 					groupUserDao.updateSuc(groupUser);
 					List<GroupUser> ls=groupUserDao.findBycgId(createGroup);
-					map.put("appid", appid);
-					map.put("secert", secert);
-					map.put("template_id", templateid);
-					map.put("keywordcount", "2");
-					map.put("keyword", "keyword");
-					map.put("first", first);
-					userInfo.setUs_id(tuanzhangId);
-					map.put("touser", userInfoDao.findById(userInfo).getOpendid());
-					map.put("form_id", ls.get(0).getTuanzhuang_propertyid());
-					WXUtil.snedM(map);
+//					map.put("appid", appid);
+//					map.put("secert", secert);
+//					map.put("template_id", templateid);
+//					map.put("keywordcount", "2");
+//					map.put("keyword", "keyword");
+//					map.put("first", first);
+//					userInfo.setUs_id(tuanzhangId);
+//					map.put("touser", userInfoDao.findById(userInfo).getOpendid());
+//					map.put("form_id", ls.get(0).getTuanzhuang_propertyid());
+//					WXUtil.snedM(map);
 					List<UserCoupon> userCouponList=new ArrayList<UserCoupon>();
 					for(int i=0;i<ls.size();i++) {
 						userInfo.setUs_id(ls.get(i).getFk_us_id());

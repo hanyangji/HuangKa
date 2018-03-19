@@ -42,7 +42,7 @@ public class UserInfoServiceimpl implements UserInfoService {
 		return userInfoDao.addOrUpdate(userInfo);
 	}
 
-	public Object rank(String info) {
+	public Object rank(UserInfo info) {
 		return userInfoDao.rank(info);
 	}
 

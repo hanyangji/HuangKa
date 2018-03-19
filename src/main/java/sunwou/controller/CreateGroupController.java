@@ -68,7 +68,7 @@ public class CreateGroupController {
 		createGroup.setGroupInfo(list.get(0));
 		createGroup.setEnjoy_num(1);
 		createGroup=createGroupService.add(createGroup);
-		System.out.println(createGroup.getCg_id());
+//		System.out.println(createGroup.getCg_id());
 		new ResultUtil().push("result", createGroup.getCg_id()).out(response, request);;
 	}
 	
@@ -98,6 +98,7 @@ public class CreateGroupController {
 	
 	/**
 	 * 拼团失败,给用户发送模板消息
+	 * @deprecated
 	 */
 	@Scheduled(cron = "0 00 00 * * ?")  
 	public void checkTimeOut() {

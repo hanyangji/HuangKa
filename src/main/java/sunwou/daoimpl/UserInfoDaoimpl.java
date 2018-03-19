@@ -9,6 +9,8 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import sunwou.dao.UserInfoDao;
@@ -45,9 +47,7 @@ public class UserInfoDaoimpl implements UserInfoDao {
 	public int update(UserInfo t) {
 		Query query=new Query(Criteria.where("_id").is(t.getUs_id()));
 		Update update=new Update();
-		if(t.getUs_phone()!=null) {
-			update.set("us_phone", t.getUs_phone());
-		}
+		
 		if(t.getNickname()!=null) {
 			update.set("nickname", t.getNickname());
 		}
@@ -66,15 +66,25 @@ public class UserInfoDaoimpl implements UserInfoDao {
 	public UserInfo incCreateNum(String us_id) {
 		Query query=new Query(Criteria.where("_id").is(us_id));
 		Update update=new Update();
+		UserInfo ui=new UserInfo();
 		UserInfo userInfo=mongoTemplate.findOne(query, UserInfo.class,"UserInfo");
 		if(userInfo.getCountGroup()==null) {
 			update.set("countGroup", 1);
-			update.set("countGroupThisWeek", 1);
+			if(userInfo.getCountGroupThisWeek()==null) {
+				update.set("countGroupThisWeek", 1);
+			}else {
+				update.inc("countGroupThisWeek", 1);
+			}
 		}else {
+			if(userInfo.getCountGroupThisWeek()==null) {
+				update.set("countGroupThisWeek", 1);
+			}else {
+				update.inc("countGroupThisWeek", 1);
+			}
 			update.inc("countGroup", 1);
-			update.inc("countGroupThisWeek", 1);
 		}
-		return mongoTemplate.findAndModify(query, update, UserInfo.class,"UserInfo");
+			ui=mongoTemplate.findAndModify(query, update, UserInfo.class,"UserInfo");
+		return ui;
 	}
 
 	public UserInfo addPoints(UserInfo userInfo) {
@@ -114,25 +124,39 @@ public class UserInfoDaoimpl implements UserInfoDao {
 	/**
 	 * 个人开团数排名
 	 */
-	public Object rank(String info) {
+	public Object rank(UserInfo userInfo) {
 		Query query = new Query();
-		if(info!=null) {
-			query.with(new Sort(Direction.DESC,info));
+		Criteria criteria=new Criteria();
+		if(userInfo.getCountGroup()!=null) {
+			query.with(new Sort(Direction.DESC,userInfo.getCountGroup()));
+			criteria.and(userInfo.getCountGroup()).exists(true);
 		}
-		query.fields().include("_id").include("nickname").include("icon").include("countGroup").include("countGroupThisWeek");
+		if(userInfo.getCountGroupLastWeek()!=null) {
+			query.with(new Sort(Direction.DESC,userInfo.getCountGroupLastWeek()));
+			criteria.and(userInfo.getCountGroupLastWeek()).exists(true);
+		}
+		query.limit(10);
+		query.addCriteria(criteria);
 	    List<UserInfo> li =mongoTemplate.find(query, UserInfo.class, "UserInfo"); 
 		return li;
 	}
 	
+
 	public void updateRank() {
 	}
 
 	public Integer findAndUpdateThisWeek() {
-		List<UserInfo> list=mongoTemplate.find(new Query(), UserInfo.class);
+		Query query = new Query();
+		Criteria criteria=Criteria.where("countGroupThisWeek").exists(true);
+		query.addCriteria(criteria);
+		List<UserInfo> list=mongoTemplate.find(query, UserInfo.class,"UserInfo");
 		Update u=new Update();
 		for(int i=0;i<list.size();i++) {
 			u.set("countGroupLastWeek",list.get(i).getCountGroupThisWeek());
+			u.set("countGroupThisWeek", 0);
 		}
-		return mongoTemplate.upsert(new Query(), u, "UserInfo").getN();
+		return mongoTemplate.updateFirst(query, u, "UserInfo").getN();
 	}
+	
+
 }

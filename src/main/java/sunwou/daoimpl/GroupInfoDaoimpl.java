@@ -141,10 +141,10 @@ public class GroupInfoDaoimpl implements GroupInfoDao {
 	}
 
 	public List<GroupInfo> findById(GroupInfo groupInfo) {
-		System.out.println("sed");
+//		System.out.println("sed");
 		Query query=new Query(Criteria.where("_id").is(groupInfo.getGr_id()));
 		List<GroupInfo> ls=mongoTemplate.find(query, GroupInfo.class, "GroupInfo");
-		System.out.println("ls"+ls);
+//		System.out.println("ls"+ls);
 		return ls;
 	}
 

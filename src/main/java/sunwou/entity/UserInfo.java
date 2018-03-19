@@ -7,9 +7,9 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class UserInfo {
 	@Id
 	private String us_id;
-	private String us_phone;
+//	private String us_phone;
 	private String nickname;
-	private Integer points;
+//	private Integer points;
 	private String city;
 	private String icon;
 	private String countGroup;
@@ -61,29 +61,19 @@ public class UserInfo {
 	}
 	@Override
 	public String toString() {
-		return "UserInfo [us_id=" + us_id + ", us_phone=" + us_phone + ", nickname=" + nickname + ", points=" + points
-				+ ", city=" + city + ", icon=" + icon + "]";
+		return "UserInfo [us_id=" + us_id + ", nickname=" + nickname + ", city=" + city + ", icon=" + icon
+				+ ", countGroup=" + countGroup + ", countGroupLastWeek=" + countGroupLastWeek + ", countGroupThisWeek="
+				+ countGroupThisWeek + ", opendid=" + opendid + ", fk_userid=" + fk_userid + ", appid=" + appid + "]";
 	}
 	public void setUs_id(String us_id) {
 		this.us_id = us_id;
 	}
-	public String getUs_phone() {
-		return us_phone;
-	}
-	public void setUs_phone(String us_phone) {
-		this.us_phone = us_phone;
-	}
+
 	public String getNickname() {
 		return nickname;
 	}
 	public void setNickname(String nickname) {
 		this.nickname = nickname;
-	}
-	public Integer getPoints() {
-		return points;
-	}
-	public void setPoints(Integer points) {
-		this.points = points;
 	}
 	public String getCity() {
 		return city;
